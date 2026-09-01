@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('status')->default('Tersedia');
             $table->unsignedInteger('price_1h')->default(10000);
-            $table->unsignedInteger('price_2h')->default(18000);
+            $table->unsignedInteger('price_2h')->default(25000);
             $table->unsignedInteger('price_1day')->default(55000);
             $table->string('photo_path')->nullable();
             $table->timestamps();

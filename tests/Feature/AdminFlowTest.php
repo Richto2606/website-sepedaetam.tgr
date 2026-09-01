@@ -27,12 +27,43 @@ class AdminFlowTest extends TestCase
             'description' => 'Desc',
             'status' => 'Tersedia',
             'price_1h' => 10000,
-            'price_2h' => 18000,
+            'price_2h' => 25000,
             'price_1day' => 55000,
             'photo' => UploadedFile::fake()->image('bike.jpg'),
         ])->assertRedirect('/admin');
 
         $this->assertDatabaseHas('bikes', ['name' => 'Test Bike']);
+    }
+
+    public function test_admin_can_update_bike(): void
+    {
+        $bike = Bike::create([
+            'name' => 'Bike Lama',
+            'category' => 'Test',
+            'description' => 'Desc',
+            'status' => 'Tersedia',
+            'price_1h' => 10000,
+            'price_2h' => 25000,
+            'price_1day' => 55000,
+            'photo_path' => null,
+        ]);
+
+        $this->post('/admin/login', [
+            'username' => 'sepedaetam.tgr',
+            'password' => 'sepedaetam26',
+        ]);
+
+        $this->patch('/admin/bikes/' . $bike->id, [
+            'name' => 'Bike Baru',
+            'category' => 'Update',
+            'description' => 'Desc Baru',
+            'status' => 'Disewa',
+            'price_1h' => 12000,
+            'price_2h' => 25000,
+            'price_1day' => 60000,
+        ])->assertRedirect('/admin');
+
+        $this->assertDatabaseHas('bikes', ['name' => 'Bike Baru', 'price_2h' => 25000]);
     }
 
     public function test_admin_can_store_booking(): void
@@ -43,7 +74,7 @@ class AdminFlowTest extends TestCase
             'description' => 'Desc',
             'status' => 'Tersedia',
             'price_1h' => 10000,
-            'price_2h' => 18000,
+            'price_2h' => 25000,
             'price_1day' => 55000,
             'photo_path' => null,
         ]);

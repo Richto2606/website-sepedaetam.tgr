@@ -56,10 +56,10 @@
           <p class="text-muted text-base md:text-lg max-w-xl leading-relaxed">Sepedaetam.tgr — penyewaan sepeda modern untuk Gen Z. <span class="hidden sm:inline">Harga transparan, booking cepat, dan sepeda terawat.</span></p>
           <div class="flex flex-wrap gap-3 mt-4">
             <div class="bg-soft-gray px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full"></span> 8 sepeda tersedia</div>
-            <div class="bg-soft-gray px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">⏱️ 1 jam · 2 jam · 1 hari</div>
+            <div class="bg-soft-gray px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">⏱️ 1 jam · 3 jam · 1 hari</div>
           </div>
           <div class="flex flex-wrap gap-3 mt-5">
-            <a href="#kontak" class="btn-wa text-white font-semibold px-6 py-2.5 rounded-full shadow-sm flex items-center gap-2 text-sm">📱 Booking via WhatsApp</a>
+            <a href="https://wa.me/6281776393708" target="_blank" rel="noopener noreferrer" class="btn-wa text-white font-semibold px-6 py-2.5 rounded-full shadow-sm flex items-center gap-2 text-sm">📱 Booking via WhatsApp</a>
             <a href="#katalog" class="btn-outline-dark text-sm font-medium px-6 py-2.5 rounded-full">Lihat katalog →</a>
           </div>
         </div>
@@ -74,7 +74,7 @@
         <h3 class="text-xl font-bold flex items-center gap-2"><span class="text-2xl">💎</span> Tarif fleksibel</h3>
         <ul class="mt-3 space-y-2 text-sm">
           <li class="flex items-center gap-3"><span class="w-8 h-8 bg-soft-gray rounded-full flex items-center justify-center text-sm font-bold">1</span> 1 jam — <span class="font-semibold">Rp10.000</span></li>
-          <li class="flex items-center gap-3"><span class="w-8 h-8 bg-soft-gray rounded-full flex items-center justify-center text-sm font-bold">2</span> 2 jam — <span class="font-semibold">Rp18.000</span></li>
+           <li class="flex items-center gap-3"><span class="w-8 h-8 bg-soft-gray rounded-full flex items-center justify-center text-sm font-bold">2</span> 3 jam — <span class="font-semibold">Rp25.000</span></li>
           <li class="flex items-center gap-3"><span class="w-8 h-8 bg-soft-gray rounded-full flex items-center justify-center text-sm font-bold">3</span> 1 hari — <span class="font-semibold">Rp55.000</span></li>
         </ul>
         <div class="mt-3 pt-3 border-t border-soft/70 text-sm flex items-center gap-3">
@@ -88,7 +88,7 @@
         <div class="grid grid-cols-2 gap-3 mt-3 text-sm">
           <div class="bg-soft-gray p-3 rounded-xl"><span class="block font-semibold">✅ Terawat</span><span class="text-xs text-muted">servis rutin</span></div>
           <div class="bg-soft-gray p-3 rounded-xl"><span class="block font-semibold">📱 Booking WA</span><span class="text-xs text-muted">cepat & mudah</span></div>
-          <div class="bg-soft-gray p-3 rounded-xl"><span class="block font-semibold">🔄 Fleksibel</span><span class="text-xs text-muted">per jam / 2 jam / hari</span></div>
+           <div class="bg-soft-gray p-3 rounded-xl"><span class="block font-semibold">🔄 Fleksibel</span><span class="text-xs text-muted">per jam / 3 jam / hari</span></div>
           <div class="bg-soft-gray p-3 rounded-xl"><span class="block font-semibold">⛑️ Helm tersedia</span><span class="text-xs text-muted">Rp3.000</span></div>
         </div>
       </div>
@@ -110,8 +110,8 @@
             @endif
           </div>
           <div class="flex justify-between items-start"><div><h3 class="font-bold text-lg">{{ $bike->name }}</h3><p class="text-xs text-muted">{{ $bike->description ?? '-' }}</p></div><span class="badge-pill {{ $bike->status === 'Tersedia' ? 'bg-green-100 text-green-700' : ($bike->status === 'Disewa' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700') }}">{{ $bike->status }}</span></div>
-          <div class="flex flex-wrap gap-2 mt-3 text-xs font-medium"><span class="bg-soft-gray px-3 py-1.5 rounded-full">1 jam <span class="text-[#0f172a] font-semibold">Rp{{ number_format($bike->price_1h, 0, ',', '.') }}</span></span><span class="bg-soft-gray px-3 py-1.5 rounded-full">2 jam <span class="text-[#0f172a] font-semibold">Rp{{ number_format($bike->price_2h, 0, ',', '.') }}</span></span><span class="bg-soft-gray px-3 py-1.5 rounded-full">1 hari <span class="text-[#0f172a] font-semibold">Rp{{ number_format($bike->price_1day, 0, ',', '.') }}</span></span></div>
-          <div class="mt-3 flex gap-2"><a href="#kontak" class="btn-wa text-white text-xs font-semibold px-4 py-2 rounded-full shadow-sm flex-1 text-center">Booking WA</a><button type="button" onclick="showBikeDetail(this)" data-name="{{ e($bike->name) }}" data-category="{{ e($bike->category ?? '-') }}" data-description="{{ e($bike->description ?? '-') }}" data-status="{{ e($bike->status) }}" data-price-1h="{{ $bike->price_1h }}" data-price-2h="{{ $bike->price_2h }}" data-price-1day="{{ $bike->price_1day }}" class="border border-soft text-xs px-3 py-2 rounded-full hover:bg-soft-gray transition flex-1 text-center">Detail</button></div>
+          <div class="flex flex-wrap gap-2 mt-3 text-xs font-medium"><span class="bg-soft-gray px-3 py-1.5 rounded-full">1 jam <span class="text-[#0f172a] font-semibold">Rp{{ number_format($bike->price_1h, 0, ',', '.') }}</span></span><span class="bg-soft-gray px-3 py-1.5 rounded-full">3 jam <span class="text-[#0f172a] font-semibold">Rp{{ number_format($bike->price_2h, 0, ',', '.') }}</span></span><span class="bg-soft-gray px-3 py-1.5 rounded-full">1 hari <span class="text-[#0f172a] font-semibold">Rp{{ number_format($bike->price_1day, 0, ',', '.') }}</span></span></div>
+                     <div class="mt-3 flex gap-2"><a href="https://wa.me/6281776393708" target="_blank" rel="noopener noreferrer" class="btn-wa text-white text-xs font-semibold px-4 py-2 rounded-full shadow-sm flex-1 text-center">Booking WA</a><button type="button" onclick="showBikeDetail(this)" data-name="{{ e($bike->name) }}" data-category="{{ e($bike->category ?? '-') }}" data-description="{{ e($bike->description ?? '-') }}" data-status="{{ e($bike->status) }}" data-price-1h="{{ $bike->price_1h }}" data-price-2h="{{ $bike->price_2h }}" data-price-1day="{{ $bike->price_1day }}" class="border border-soft text-xs px-3 py-2 rounded-full hover:bg-soft-gray transition flex-1 text-center">Detail</button></div>
         </div>
         @empty
         <div class="bg-white border border-soft rounded-xl p-5 card-hover col-span-full text-center text-sm text-muted">Belum ada sepeda.</div>
@@ -188,7 +188,7 @@
       document.getElementById('bikeDetailCategory').textContent = button.dataset.category;
       document.getElementById('bikeDetailStatus').textContent = button.dataset.status;
       document.getElementById('bikeDetailDescription').textContent = button.dataset.description;
-      document.getElementById('bikeDetailPrice').textContent = '1 jam Rp' + Number(button.dataset.price1h).toLocaleString('id-ID') + ' · 2 jam Rp' + Number(button.dataset.price2h).toLocaleString('id-ID') + ' · 1 hari Rp' + Number(button.dataset.price1day).toLocaleString('id-ID');
+       document.getElementById('bikeDetailPrice').textContent = '1 jam Rp' + Number(button.dataset.price1h).toLocaleString('id-ID') + ' · 3 jam Rp' + Number(button.dataset.price2h).toLocaleString('id-ID') + ' · 1 hari Rp' + Number(button.dataset.price1day).toLocaleString('id-ID');
       document.getElementById('bikeDetailModal').classList.remove('hidden');
       document.getElementById('bikeDetailModal').classList.add('flex');
     }

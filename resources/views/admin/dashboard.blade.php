@@ -81,7 +81,8 @@
           <h1 class="text-2xl font-bold text-[#0f172a]" id="pageTitle">Dashboard</h1>
           <p class="text-sm text-muted" id="pageDesc">Selamat datang, Admin! — kelola bisnis sepeda dengan mudah.</p>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="#tab-booking" onclick="switchTab('booking')" class="bg-[#2563eb]/10 text-[#2563eb] px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#2563eb]/15 transition"><i class="fas fa-calendar-check mr-1"></i> Booking</a>
           <span class="text-sm text-muted hidden sm:inline"><i class="far fa-clock mr-1"></i> Kamis, 27 Agt 2026</span>
           <div class="w-9 h-9 rounded-full bg-[#2563eb] text-white flex items-center justify-center font-bold text-sm shadow-sm">A</div>
         </div>
@@ -110,7 +111,7 @@
         <div class="bg-white rounded-xl shadow-soft border border-soft p-5">
           <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
             <h2 class="font-bold text-[#0f172a]"><i class="fas fa-bicycle text-[#2563eb] mr-2"></i> Daftar Sepeda</h2>
-            <button onclick="document.getElementById('modalSepeda').classList.remove('hidden')" class="bg-[#0f172a] text-white text-xs font-semibold px-4 py-1.5 rounded-full hover:bg-[#1e293b] transition"><i class="fas fa-plus mr-1"></i> Tambah Sepeda</button>
+            <button type="button" onclick="openBikeCreate()" class="bg-[#0f172a] text-white text-xs font-semibold px-4 py-1.5 rounded-full hover:bg-[#1e293b] transition"><i class="fas fa-plus mr-1"></i> Tambah Sepeda</button>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
@@ -130,7 +131,7 @@
                   <td class="py-2.5"><span class="badge-pill {{ $bike->status === 'Tersedia' ? 'bg-green-100 text-green-700' : ($bike->status === 'Disewa' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700') }}">{{ $bike->status }}</span></td>
                   <td class="py-2.5 hidden md:table-cell text-xs text-muted">{{ number_format($bike->price_1h, 0, ',', '.') }} / {{ number_format($bike->price_2h, 0, ',', '.') }} / {{ number_format($bike->price_1day, 0, ',', '.') }}</td>
                   <td class="py-2.5 text-right flex items-center justify-end gap-2">
-                    <button onclick="document.getElementById('modalSepeda').classList.remove('hidden')" class="text-[#2563eb] hover:underline text-xs font-medium"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="text-[#2563eb] hover:underline text-xs font-medium" data-id="{{ $bike->id }}" data-name="{{ e($bike->name) }}" data-category="{{ e($bike->category ?? '') }}" data-description="{{ e($bike->description ?? '') }}" data-status="{{ e($bike->status) }}" data-price-1h="{{ $bike->price_1h }}" data-price-2h="{{ $bike->price_2h }}" data-price-1day="{{ $bike->price_1day }}" data-photo-path="{{ e($bike->photo_path ?? '') }}" onclick="editBike(this)"><i class="fas fa-edit"></i></button>
                     <form method="POST" action="{{ route('admin.bikes.destroy', $bike) }}" onsubmit="return confirm('Hapus sepeda ini?')">@csrf @method('DELETE')<button class="text-red-500 hover:underline text-xs font-medium"><i class="fas fa-trash"></i></button></form>
                   </td>
                 </tr>
@@ -147,7 +148,7 @@
         <div class="bg-white rounded-xl shadow-soft border border-soft p-5">
           <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
             <h2 class="font-bold text-[#0f172a]"><i class="fas fa-calendar-check text-[#2563eb] mr-2"></i> Manajemen Booking</h2>
-            <button onclick="document.getElementById('modalBooking').classList.remove('hidden')" class="bg-[#0f172a] text-white text-xs font-semibold px-4 py-1.5 rounded-full hover:bg-[#1e293b] transition"><i class="fas fa-plus mr-1"></i> Booking Baru</button>
+            <button type="button" onclick="createBooking()" class="bg-[#0f172a] text-white text-xs font-semibold px-4 py-1.5 rounded-full hover:bg-[#1e293b] transition"><i class="fas fa-plus mr-1"></i> Booking Baru</button>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
@@ -160,7 +161,7 @@
                   <td class="py-2.5 hidden sm:table-cell">{{ $booking->duration }}</td>
                   <td class="py-2.5"><span class="badge-pill {{ $booking->status_payment === 'Lunas' ? 'bg-green-100 text-green-700' : ($booking->status_payment === 'DP' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">{{ $booking->status_payment }}</span></td>
                   <td class="py-2.5 hidden md:table-cell">Rp{{ number_format($booking->total, 0, ',', '.') }}</td>
-                  <td class="py-2.5 text-right flex items-center justify-end gap-2"><button type="button" class="text-[#2563eb] hover:underline text-xs font-medium" onclick="editBooking({{ $booking->id }}, '{{ e($booking->renter_name) }}', '{{ e($booking->phone) }}', '{{ e($booking->duration) }}', '{{ e($booking->status_payment) }}', {{ $booking->total }})"><i class="fas fa-edit"></i></button><form method="POST" action="{{ route('admin.bookings.destroy', $booking) }}" onsubmit="return confirm('Hapus booking ini?')">@csrf @method('DELETE')<button class="text-red-500 hover:underline text-xs font-medium"><i class="fas fa-trash"></i></button></form></td>
+                  <td class="py-2.5 text-right flex items-center justify-end gap-2"><button type="button" class="text-[#2563eb] hover:underline text-xs font-medium" data-id="{{ $booking->id }}" data-bike-id="{{ $booking->bike_id }}" data-renter-name="{{ e($booking->renter_name) }}" data-phone="{{ e($booking->phone) }}" data-duration="{{ e($booking->duration) }}" data-status-payment="{{ e($booking->status_payment) }}" data-start-at="{{ optional($booking->start_at)->format('Y-m-d\\TH:i') }}" data-total="{{ $booking->total }}" onclick="editBooking(this)"><i class="fas fa-edit"></i></button><form method="POST" action="{{ route('admin.bookings.destroy', $booking) }}" onsubmit="return confirm('Hapus booking ini?')">@csrf @method('DELETE')<button class="text-red-500 hover:underline text-xs font-medium"><i class="fas fa-trash"></i></button></form></td>
                 </tr>
                 @empty
                 <tr><td colspan="6" class="py-4 text-center text-sm text-muted">Belum ada booking</td></tr>
@@ -226,36 +227,37 @@
 
   <div class="fixed inset-0 modal-overlay flex items-center justify-center z-50 hidden" id="modalSepeda">
     <div class="bg-white rounded-2xl shadow-xl p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold"><i class="fas fa-bicycle text-[#2563eb] mr-2"></i> Tambah Sepeda</h3><button onclick="document.getElementById('modalSepeda').classList.add('hidden')" class="text-muted hover:text-[#0f172a]"><i class="fas fa-times"></i></button></div>
-      <form method="POST" action="{{ route('admin.bikes.store') }}" enctype="multipart/form-data" class="space-y-4">
+      <div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold" id="bikeModalTitle"><i class="fas fa-bicycle text-[#2563eb] mr-2"></i> Tambah Sepeda</h3><button type="button" onclick="closeBikeModal()" class="text-muted hover:text-[#0f172a]"><i class="fas fa-times"></i></button></div>
+      <form id="bikeForm" method="POST" action="{{ route('admin.bikes.store') }}" enctype="multipart/form-data" class="space-y-4">
         @csrf
+        <input type="hidden" name="_method" id="bikeMethod" value="POST">
         @if ($errors->any())
           <div class="rounded-xl bg-red-50 text-red-700 text-xs p-3">{{ $errors->first() }}</div>
         @endif
         <div>
           <label class="text-xs font-semibold text-muted block mb-1">Nama Sepeda</label>
-          <input name="name" type="text" class="w-full border border-soft rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:border-transparent" placeholder="Mountain XC">
+          <input id="bikeName" name="name" type="text" class="w-full border border-soft rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:border-transparent" placeholder="Mountain XC">
         </div>
         <div>
           <label class="text-xs font-semibold text-muted block mb-1">Kategori</label>
-          <input name="category" type="text" class="w-full border border-soft rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:border-transparent" placeholder="Gunung">
+          <input id="bikeCategory" name="category" type="text" class="w-full border border-soft rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:border-transparent" placeholder="Gunung">
         </div>
         <div>
           <label class="text-xs font-semibold text-muted block mb-1">Deskripsi</label>
-          <textarea name="description" class="w-full border border-soft rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb] h-20" placeholder="Spesifikasi singkat"></textarea>
+          <textarea id="bikeDescription" name="description" class="w-full border border-soft rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb] h-20" placeholder="Spesifikasi singkat"></textarea>
         </div>
         <div>
           <label class="text-xs font-semibold text-muted block mb-1">Upload Foto</label>
-          <input name="photo" type="file" accept="image/png,image/jpeg" class="w-full border border-soft rounded-xl px-4 py-2 text-sm bg-white">
+          <input id="bikePhoto" name="photo" type="file" accept="image/png,image/jpeg" class="w-full border border-soft rounded-xl px-4 py-2 text-sm bg-white">
         </div>
         <div class="grid grid-cols-3 gap-3">
-          <div><label class="text-xs font-semibold text-muted block mb-1">1 Jam</label><input name="price_1h" type="number" class="w-full border border-soft rounded-xl px-3 py-2 text-sm" value="10000"></div>
-          <div><label class="text-xs font-semibold text-muted block mb-1">2 Jam</label><input name="price_2h" type="number" class="w-full border border-soft rounded-xl px-3 py-2 text-sm" value="18000"></div>
-          <div><label class="text-xs font-semibold text-muted block mb-1">1 Hari</label><input name="price_1day" type="number" class="w-full border border-soft rounded-xl px-3 py-2 text-sm" value="55000"></div>
+          <div><label class="text-xs font-semibold text-muted block mb-1">1 Jam</label><input id="bikePrice1h" name="price_1h" type="number" class="w-full border border-soft rounded-xl px-3 py-2 text-sm" value="10000"></div>
+          <div><label class="text-xs font-semibold text-muted block mb-1">3 Jam</label><input id="bikePrice2h" name="price_2h" type="number" class="w-full border border-soft rounded-xl px-3 py-2 text-sm" value="25000"></div>
+          <div><label class="text-xs font-semibold text-muted block mb-1">1 Hari</label><input id="bikePrice1day" name="price_1day" type="number" class="w-full border border-soft rounded-xl px-3 py-2 text-sm" value="55000"></div>
         </div>
         <div>
           <label class="text-xs font-semibold text-muted block mb-1">Status</label>
-          <select name="status" class="w-full border border-soft rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]">
+          <select id="bikeStatus" name="status" class="w-full border border-soft rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]">
             <option selected>Tersedia</option>
             <option>Disewa</option>
             <option>Perawatan</option>
@@ -272,11 +274,21 @@
       <form id="bookingForm" method="POST" action="{{ route('admin.bookings.store') }}" class="space-y-4">
         @csrf
         <input type="hidden" name="_method" id="bookingMethod" value="POST">
-        <input type="hidden" name="bike_id" value="{{ $bikes->first()?->id }}">
+        <div>
+          <label class="text-xs font-semibold text-muted block mb-1">Sepeda</label>
+          <select id="bookingBike" name="bike_id" class="w-full border border-soft rounded-xl px-4 py-2 text-sm">
+            @forelse ($bikes as $bike)
+              <option value="{{ $bike->id }}">{{ $bike->name }}</option>
+            @empty
+              <option value="">Belum ada sepeda</option>
+            @endforelse
+          </select>
+        </div>
         <div><label class="text-xs font-semibold text-muted block mb-1">Nama Penyewa</label><input id="bookingRenter" name="renter_name" type="text" class="w-full border border-soft rounded-xl px-4 py-2 text-sm" placeholder="Nama lengkap"></div>
         <div><label class="text-xs font-semibold text-muted block mb-1">Nomor HP</label><input id="bookingPhone" name="phone" type="text" class="w-full border border-soft rounded-xl px-4 py-2 text-sm" placeholder="08xx-xxxx-xxxx"></div>
         <div><label class="text-xs font-semibold text-muted block mb-1">Paket Sewa</label><input id="bookingDuration" name="duration" type="text" class="w-full border border-soft rounded-xl px-4 py-2 text-sm" placeholder="1 Jam (Rp10.000)"></div>
         <div><label class="text-xs font-semibold text-muted block mb-1">Status Pembayaran</label><select id="bookingStatus" name="status_payment" class="w-full border border-soft rounded-xl px-4 py-2 text-sm"><option>Lunas</option><option>DP</option><option>Belum Bayar</option></select></div>
+        <div><label class="text-xs font-semibold text-muted block mb-1">Start At</label><input id="bookingStartAt" name="start_at" type="datetime-local" class="w-full border border-soft rounded-xl px-4 py-2 text-sm"></div>
         <div><label class="text-xs font-semibold text-muted block mb-1">Total</label><input id="bookingTotal" name="total" type="number" class="w-full border border-soft rounded-xl px-4 py-2 text-sm" value="10000"></div>
         <button type="submit" class="w-full bg-[#0f172a] text-white font-semibold py-2.5 rounded-full hover:bg-[#1e293b] transition"><i class="fas fa-save mr-2"></i> Simpan Booking</button>
       </form>
@@ -284,14 +296,16 @@
   </div>
 
   <script>
-    document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => { link.addEventListener('click', function() { document.querySelectorAll('.sidebar-link[data-tab]').forEach(l => l.classList.remove('active')); this.classList.add('active'); const tabId = this.dataset.tab; document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); document.getElementById('tab-' + tabId).classList.add('active'); const titles = {                     dashboard: ['Dashboard', 'Selamat datang, Admin! — kelola bisnis sepeda dengan mudah.'],
-                    sepeda: ['Kelola Sepeda', 'Tambah, edit, dan kelola data sepeda serta tarif.'],
-                    booking: ['Manajemen Booking', 'Lihat dan kelola semua transaksi penyewaan.'],
-                    laporan: ['Laporan Keuangan', 'Rekap pemasukan, pengeluaran, dan laba bersih.'],
-                    profil: ['Profil Admin', 'Informasi usaha, kontak, dan profil Sepedaetam.tgr.']
- }; document.getElementById('pageTitle').textContent = titles[tabId][0]; document.getElementById('pageDesc').textContent = titles[tabId][1]; }); });
+    function switchTab(tabId) { document.querySelectorAll('.sidebar-link[data-tab]').forEach(l => l.classList.toggle('active', l.dataset.tab === tabId)); document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); const tab = document.getElementById('tab-' + tabId); if (tab) tab.classList.add('active'); const titles = { dashboard: ['Dashboard', 'Selamat datang, Admin! — kelola bisnis sepeda dengan mudah.'], sepeda: ['Kelola Sepeda', 'Tambah, edit, dan kelola data sepeda serta tarif.'], booking: ['Manajemen Booking', 'Lihat dan kelola semua transaksi penyewaan.'], laporan: ['Laporan Keuangan', 'Rekap pemasukan, pengeluaran, dan laba bersih.'], profil: ['Profil Admin', 'Informasi usaha, kontak, dan profil Sepedaetam.tgr.'] }; if (titles[tabId]) { document.getElementById('pageTitle').textContent = titles[tabId][0]; document.getElementById('pageDesc').textContent = titles[tabId][1]; } }
+    document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => { link.addEventListener('click', function() { switchTab(this.dataset.tab); }); });
     document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', function() { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); this.classList.add('active'); const isMonthly = this.textContent.trim() === 'Bulanan'; document.getElementById('incomeVal').textContent = isMonthly ? 'Rp4.820.000' : 'Rp1.240.000'; document.getElementById('expenseVal').textContent = isMonthly ? 'Rp1.380.000' : 'Rp420.000'; document.getElementById('profitVal').textContent = isMonthly ? 'Rp3.440.000' : 'Rp820.000'; document.querySelectorAll('.export-btn-pdf').forEach(a => a.href = '/admin/reports/export/pdf?period=' + (isMonthly ? 'bulanan' : 'mingguan')); document.querySelectorAll('.export-btn-excel').forEach(a => a.href = '/admin/reports/export/excel?period=' + (isMonthly ? 'bulanan' : 'mingguan')); }); });
-    function editBooking(id, renter, phone, duration, status, total) { document.getElementById('bookingMethod').value = 'PATCH'; document.getElementById('bookingForm').action = '/admin/bookings/' + id; document.getElementById('bookingRenter').value = renter; document.getElementById('bookingPhone').value = phone; document.getElementById('bookingDuration').value = duration; document.getElementById('bookingStatus').value = status; document.getElementById('bookingTotal').value = total; document.getElementById('modalBooking').classList.remove('hidden'); }
+    function closeBikeModal() { document.getElementById('modalSepeda').classList.add('hidden'); }
+    function resetBikeForm() { document.getElementById('bikeMethod').value = 'POST'; document.getElementById('bikeForm').action = '{{ route('admin.bikes.store') }}'; document.getElementById('bikeModalTitle').innerHTML = '<i class="fas fa-bicycle text-[#2563eb] mr-2"></i> Tambah Sepeda'; document.getElementById('bikeName').value = ''; document.getElementById('bikeCategory').value = ''; document.getElementById('bikeDescription').value = ''; document.getElementById('bikePhoto').value = ''; document.getElementById('bikePrice1h').value = 10000; document.getElementById('bikePrice2h').value = 25000; document.getElementById('bikePrice1day').value = 55000; document.getElementById('bikeStatus').value = 'Tersedia'; }
+    function openBikeCreate() { resetBikeForm(); document.getElementById('modalSepeda').classList.remove('hidden'); }
+    function editBike(button) { resetBikeForm(); document.getElementById('bikeMethod').value = 'PATCH'; document.getElementById('bikeForm').action = '/admin/bikes/' + button.dataset.id; document.getElementById('bikeModalTitle').innerHTML = '<i class="fas fa-bicycle text-[#2563eb] mr-2"></i> Edit Sepeda'; document.getElementById('bikeName').value = button.dataset.name || ''; document.getElementById('bikeCategory').value = button.dataset.category || ''; document.getElementById('bikeDescription').value = button.dataset.description || ''; document.getElementById('bikePrice1h').value = button.dataset.price1h || 10000; document.getElementById('bikePrice2h').value = button.dataset.price2h || 25000; document.getElementById('bikePrice1day').value = button.dataset.price1day || 55000; document.getElementById('bikeStatus').value = button.dataset.status || 'Tersedia'; document.getElementById('modalSepeda').classList.remove('hidden'); }
+    function resetBookingForm() { document.getElementById('bookingMethod').value = 'POST'; document.getElementById('bookingForm').action = '{{ route('admin.bookings.store') }}'; document.getElementById('bookingBike').value = @json($bikes->first()?->id); document.getElementById('bookingRenter').value = ''; document.getElementById('bookingPhone').value = ''; document.getElementById('bookingDuration').value = ''; document.getElementById('bookingStatus').value = 'DP'; document.getElementById('bookingStartAt').value = ''; document.getElementById('bookingTotal').value = 10000; }
+    function createBooking() { resetBookingForm(); document.getElementById('modalBooking').classList.remove('hidden'); }
+    function editBooking(button) { resetBookingForm(); document.getElementById('bookingMethod').value = 'PATCH'; document.getElementById('bookingForm').action = '/admin/bookings/' + button.dataset.id; document.getElementById('bookingBike').value = button.dataset.bikeId; document.getElementById('bookingRenter').value = button.dataset.renterName; document.getElementById('bookingPhone').value = button.dataset.phone; document.getElementById('bookingDuration').value = button.dataset.duration; document.getElementById('bookingStatus').value = button.dataset.statusPayment; document.getElementById('bookingStartAt').value = button.dataset.startAt || ''; document.getElementById('bookingTotal').value = button.dataset.total; document.getElementById('modalBooking').classList.remove('hidden'); }
     function previewImage(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { document.getElementById('imagePreview').src = e.target.result; document.getElementById('fileName').textContent = file.name; document.getElementById('previewContainer').classList.remove('hidden'); document.querySelector('#uploadArea label p:first-child').textContent = '✅ Foto siap diunggah'; }; reader.readAsDataURL(file); }
     const uploadArea = document.getElementById('uploadArea'); if (uploadArea) { uploadArea.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); }); uploadArea.addEventListener('dragleave', function(e) { e.preventDefault(); this.classList.remove('dragover'); }); uploadArea.addEventListener('drop', function(e) { e.preventDefault(); this.classList.remove('dragover'); const files = e.dataTransfer.files; if (files.length) { document.getElementById('fileInput').files = files; previewImage({ target: { files: files } }); } }); }
     document.querySelectorAll('.modal-overlay').forEach(modal => { modal.addEventListener('click', function(e) { if (e.target === this) this.classList.add('hidden'); }); });

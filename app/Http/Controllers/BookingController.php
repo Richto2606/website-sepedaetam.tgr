@@ -39,8 +39,12 @@ class BookingController extends Controller
     public function update(Request $request, Booking $booking): RedirectResponse
     {
         $data = $request->validate([
+            'bike_id' => ['required', 'exists:bikes,id'],
+            'renter_name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:30'],
             'duration' => ['required', 'string', 'max:255'],
             'status_payment' => ['required', 'string', 'max:255'],
+            'start_at' => ['nullable', 'date'],
             'total' => ['required', 'integer', 'min:0'],
         ]);
 

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'sepedaetam26',
         ]);
 
-        $mountain = Bike::create(['name' => 'Mountain XC', 'category' => 'Gunung', 'description' => '29″ suspensi, 21 speed', 'status' => 'Tersedia', 'price_1h' => 10000, 'price_2h' => 18000, 'price_1day' => 55000, 'photo_path' => null]);
+        $mountain = Bike::create(['name' => 'Mountain XC', 'category' => 'Gunung', 'description' => '29″ suspensi, 21 speed', 'status' => 'Tersedia', 'price_1h' => 10000, 'price_2h' => 25000, 'price_1day' => 55000, 'photo_path' => null]);
         $city = Bike::create(['name' => 'City Cruiser', 'category' => 'Perkotaan', 'description' => 'step-through, 7 speed', 'status' => 'Disewa', 'price_1h' => 10000, 'price_2h' => 18000, 'price_1day' => 55000, 'photo_path' => null]);
         Bike::create(['name' => 'E-Bike Urban', 'category' => 'Elektrik', 'description' => 'elektrik, 50km range', 'status' => 'Tersedia', 'price_1h' => 10000, 'price_2h' => 18000, 'price_1day' => 55000, 'photo_path' => null]);
         Bike::create(['name' => 'Road Racer', 'category' => 'Road', 'description' => 'carbon frame, 22 speed', 'status' => 'Tersedia', 'price_1h' => 12000, 'price_2h' => 22000, 'price_1day' => 60000, 'photo_path' => null]);

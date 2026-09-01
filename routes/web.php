@@ -91,6 +91,7 @@ Route::post('/admin/profile/password', function (Request $request) {
 })->name('admin.profile.password');
 
 Route::post('/admin/bikes', [BikeController::class, 'store'])->name('admin.bikes.store');
+Route::patch('/admin/bikes/{bike}', [BikeController::class, 'update'])->name('admin.bikes.update');
 Route::delete('/admin/bikes/{bike}', [BikeController::class, 'destroy'])->name('admin.bikes.destroy');
 Route::post('/admin/bookings', [BookingController::class, 'store'])->name('admin.bookings.store');
 Route::patch('/admin/bookings/{booking}', [BookingController::class, 'update'])->name('admin.bookings.update');
