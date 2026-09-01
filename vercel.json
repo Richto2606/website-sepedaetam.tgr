@@ -1,5 +1,5 @@
 {
-    "buildCommand": "npm run build && composer install --no-interaction --prefer-dist --no-scripts --no-dev --optimize-autoloader && composer run-script vercel",
+    "buildCommand": "npm run build",
     "outputDirectory": "public",
     "framework": null,
     "env": {
