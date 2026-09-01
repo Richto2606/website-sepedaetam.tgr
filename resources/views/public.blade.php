@@ -103,8 +103,8 @@
         @forelse ($bikes as $bike)
         <div class="bg-white border border-soft rounded-xl p-5 card-hover">
           <div class="aspect-[4/3] bg-soft-gray rounded-xl flex items-center justify-center text-6xl mb-4 overflow-hidden">
-            @if ($bike->photo_path)
-              <img src="{{ file_exists(public_path('storage/' . $bike->photo_path)) ? asset('storage/' . $bike->photo_path) : asset('storage/' . $bike->photo_path) }}" alt="{{ $bike->name }}" class="w-full h-full object-cover">
+            @if ($bike->photo_url)
+              <img src="{{ $bike->photo_url }}" alt="{{ $bike->name }}" class="w-full h-full object-cover">
             @else
               🚲
             @endif

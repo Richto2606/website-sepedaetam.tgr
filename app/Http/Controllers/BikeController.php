@@ -25,9 +25,7 @@ class BikeController extends Controller
         $photoPath = null;
 
         if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $name = str_replace(' ', '-', strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)));
-            $photoPath = $file->storeAs('bikes', $name . '-' . time() . '.' . $file->getClientOriginalExtension(), 'public');
+            $photoPath = $this->savePhoto($request->file('photo'));
         }
 
         Bike::create([
@@ -61,12 +59,9 @@ class BikeController extends Controller
 
         if ($request->hasFile('photo')) {
             if ($photoPath) {
-                Storage::disk('public')->delete($photoPath);
+                $this->deletePhoto($photoPath);
             }
-
-            $file = $request->file('photo');
-            $name = str_replace(' ', '-', strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)));
-            $photoPath = $file->storeAs('bikes', $name . '-' . time() . '.' . $file->getClientOriginalExtension(), 'public');
+            $photoPath = $this->savePhoto($request->file('photo'));
         }
 
         $bike->update([
@@ -86,11 +81,48 @@ class BikeController extends Controller
     public function destroy(Bike $bike): RedirectResponse
     {
         if ($bike->photo_path) {
-            Storage::disk('public')->delete($bike->photo_path);
+            $this->deletePhoto($bike->photo_path);
         }
 
         $bike->delete();
 
         return redirect('/admin')->with('success', 'Sepeda terhapus');
+    }
+
+    /**
+     * Save a photo to the configured filesystem disk. On serverless the
+     * local disk is read-only, so failures are swallowed and a null path
+     * stored to keep the rest of the flow working.
+     */
+    private function savePhoto($file): ?string
+    {
+        try {
+            if (config('filesystems.default') !== 'local') {
+                return $file->store('bikes', config('filesystems.default'));
+            }
+
+            $name = str_replace(' ', '-', strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)));
+            return $file->storeAs('bikes', $name . '-' . time() . '.' . $file->getClientOriginalExtension(), 'public');
+        } catch (\Throwable $e) {
+            report($e);
+            return null;
+        }
+    }
+
+    private function deletePhoto(?string $path): void
+    {
+        if (!$path) {
+            return;
+        }
+
+        try {
+            if (config('filesystems.default') !== 'local') {
+                Storage::disk(config('filesystems.default'))->delete($path);
+            } else {
+                Storage::disk('public')->delete($path);
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 }

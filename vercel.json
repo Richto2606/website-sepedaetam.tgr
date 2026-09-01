@@ -1,0 +1,49 @@
+{
+    "buildCommand": "npm run build && composer install --no-interaction --prefer-dist --no-scripts --no-dev --optimize-autoloader && composer run-script vercel",
+    "outputDirectory": "public",
+    "framework": null,
+    "env": {
+        "APP_CONFIG_CACHE": "/tmp/framework/config.php",
+        "APP_ROUTES_CACHE": "/tmp/framework/routes-v7.php",
+        "APP_SERVICES_CACHE": "/tmp/framework/services.php",
+        "APP_EVENTS_CACHE": "/tmp/framework/events.php",
+        "APP_PACKAGES_CACHE": "/tmp/framework/packages.php",
+        "VIEW_COMPILED_PATH": "/tmp/framework/views",
+        "SSR_TEMP_PATH": "/tmp/ssr",
+        "LOG_CHANNEL": "stderr"
+    },
+    "functions": {
+        "api/index.php": {
+            "runtime": "vercel-php@0.9.0"
+        }
+    },
+    "routes": [
+        {
+            "src": "/build/(.*)",
+            "dest": "/build/$1"
+        },
+        {
+            "src": "/images/(.*)",
+            "dest": "/images/$1"
+        },
+        {
+            "src": "/storage/(.*)",
+            "dest": "/storage/$1"
+        },
+        {
+            "src": "/favicon\\.ico",
+            "dest": "/favicon.ico"
+        },
+        {
+            "src": "/robots\\.txt",
+            "dest": "/robots.txt"
+        },
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
+        }
+    ]
+}

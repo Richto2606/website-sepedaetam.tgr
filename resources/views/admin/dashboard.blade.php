@@ -120,8 +120,8 @@
                 @forelse ($bikes as $bike)
                 <tr class="border-b border-soft/60 table-row-hover">
                   <td class="py-2.5">
-                    @if ($bike->photo_path)
-                      <img src="{{ asset('storage/' . $bike->photo_path) }}" class="w-10 h-10 rounded-lg object-cover border border-soft">
+                    @if ($bike->photo_url)
+                      <img src="{{ $bike->photo_url }}" class="w-10 h-10 rounded-lg object-cover border border-soft">
                     @else
                       <div class="w-10 h-10 rounded-lg bg-soft-gray border border-soft flex items-center justify-center text-lg">🚲</div>
                     @endif
